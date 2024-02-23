@@ -1,0 +1,72 @@
+from abc import ABC, abstractmethod
+
+class AbstractFactory(ABC):
+    @abstractmethod
+    def create_ticket(self, type):
+        pass
+    
+
+class Ticket(ABC):
+    
+    @abstractmethod
+    def info(self):
+        pass
+
+class FootballAcademyFactory(AbstractFactory):
+    def create_ticket(self, type):
+        if type == 'training':
+            return TrainingTicket()
+        if type == 'match':
+            return MatchTicket()
+        
+
+class FootballCompanyFactory(AbstractFactory):
+    
+    def create_ticket(self, type):
+        
+        if type == 'training':
+            return TrainingTicket()
+        if type == 'match':
+            return MatchTicket()
+        if type == 'event':
+            return EventTicket()
+
+class FactoryProducer:
+    
+    def get_factory(self, type):
+        
+        if type == 'FootballAcademyFactory':
+            return FootballAcademyFactory()
+        if type == 'FootballCompanyFactory':
+            return FootballCompanyFactory()
+        
+        
+class TrainingTicket(Ticket):
+    
+    def info(self):
+        return self.__class__.__name__
+    
+class MatchTicket(Ticket):
+    
+    def info(self):
+        return self.__class__.__name__
+    
+class EventTicket(Ticket):
+    
+    def info(self):
+        return self.__class__.__name__
+    
+
+
+producer = FactoryProducer()
+
+academy_factory = producer.get_factory('FootballAcademyFactory')
+company_factory = producer.get_factory('FootballCompanyFactory')
+
+training_ticket = academy_factory.create_ticket('training')
+match_ticket = company_factory.create_ticket('match')
+event_ticket = company_factory.create_ticket('event')
+
+print(training_ticket.info())
+print(match_ticket.info())
+print(event_ticket.info())
